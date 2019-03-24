@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../mixins/validation_mixin.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -7,7 +8,8 @@ class LoginScreen extends StatefulWidget {
   }
 }
 
-class LoginScreenState extends State<LoginScreen> {
+class LoginScreenState extends State<LoginScreen>
+    with ValidationMixin {
   final formKey = GlobalKey<FormState>();
 
   String email = '';
@@ -39,12 +41,7 @@ class LoginScreenState extends State<LoginScreen> {
         hintText: 'you@example.com',
       ),
       keyboardType: TextInputType.emailAddress,
-      validator: (String value) {
-        if (isEmail(value))
-          return null;
-
-        return "Please enter a valid email";
-      },
+      validator: validateEmail,
       onSaved: (String value) {
         email = value;
     },
@@ -58,12 +55,7 @@ class LoginScreenState extends State<LoginScreen> {
         hintText: 'Password',
       ),
       obscureText: true,
-      validator: (String value) {
-        if (value.length < 4) {
-          return 'Password is too short';
-        }
-        return null;
-      },
+      validator: validatePassword,
       onSaved: (String value) {
         pass = value;
       },
@@ -83,13 +75,5 @@ class LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  bool isEmail(String em) {
-
-    String p = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-
-    RegExp regExp = new RegExp(p);
-
-    return regExp.hasMatch(em);
-  }
 }
 
